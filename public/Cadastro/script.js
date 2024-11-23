@@ -43,30 +43,49 @@ formCadastro.addEventListener('submit', async (e) => {
     } else {
         // Adicionar o novo usuário à lista de usuários        
         try {
-            console.log(novoUsuario)
-            const response = await fetch('https://teste-valioso-deploy.vercel.app', {
+            console.log('Dados do novo usuário:', novoUsuario);
+            const response = await fetch('https://teste-valioso-deploy.vercel.app/api/usuarios', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(novoUsuario)  // Enviando a descrição ao backend
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Adicionando headers para CORS
+                    'Accept': 'application/json'
+                },
+                credentials: 'include', // Importante para CORS
+                body: JSON.stringify(novoUsuario)
             });
-            
+        
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Erro ao cadastrar usuário');
+            }
+        
+            const data = await response.json();
+            console.log('Resposta do servidor:', data);
+        
+            // Adiciona à lista local apenas se o servidor respondeu com sucesso
+            usuarios.push(novoUsuario);
+            localStorage.setItem('usuarios', JSON.stringify(usuarios));
+        
+            // Exibir modal de sucesso
+            ativarModal("Sucesso!", "Cadastro realizado com sucesso!", "normal");
+        
+            // Limpar o formulário após o cadastro
+            formCadastro.reset();
+        
+            // Redirecionar para a página de login após fechar o modal
+            fecharBtn.addEventListener('click', () => {
+                window.location.href = "../Login/login.html";
+            });
+        
         } catch (error) {
-            console.error('Erro ao adicionar tarefa:', error);
+            console.error('Erro ao cadastrar usuário:', error);
+            ativarModal("Erro!", "Não foi possível realizar o cadastro. Tente novamente.", "erro");
+        
         }
-        localStorage.setItem('usuarios', JSON.stringify(usuarios));
-
-        // Exibir modal de sucesso
-        ativarModal("Sucesso!", "Cadastro realizado com sucesso!", "normal");
-
-        // Limpar o formulário após o cadastro
-        formCadastro.reset();
-
-        // Redirecionar para a página de login após fechar o modal
-        fecharBtn.addEventListener('click', () => {
-            window.location.href = "../Login/login.html";
-        });
     }
 });
+
 
 
 
