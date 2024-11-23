@@ -12,7 +12,7 @@ formLogin.addEventListener("submit", async (e) => {
   const userSenha = document.getElementById("password").value;
 
   // Recuperar os usuários do localStorage
-  const response = await fetch(`https://teste-valioso-deploy.vercel.app${userEmail}/${userSenha}`);
+  const response = await fetch(`https://teste-valioso-deploy.vercel.app/api/usuarios${userEmail}/${userSenha}`);
   const usuario = await response.json();
 
   if (usuario.length > 0) {
