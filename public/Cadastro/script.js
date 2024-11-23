@@ -44,7 +44,7 @@ formCadastro.addEventListener('submit', async (e) => {
         // Adicionar o novo usuário à lista de usuários        
         try {
             console.log(novoUsuario)
-            const response = await fetch('https://teste-valioso-deploy.vercel.app/api/usuarios', {
+            const response = await fetch('https://teste-valioso-deploy.vercel.app', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(novoUsuario)  // Enviando a descrição ao backend
